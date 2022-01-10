@@ -8,7 +8,14 @@ public class HealthManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (tag != "Enemy" && (other.tag == "Enemy" || other.tag == "Coconut"))
+        if (tag == "Player" && (other.tag == "Enemy" || other.tag == "Coconut"))
+        {
             lives--;
+
+            if (lives <= 0)
+                Debug.Log("YOU DIED");
+        }
     }
+
+
 }

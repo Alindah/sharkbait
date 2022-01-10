@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
 
     // Weapon Variables
     public GameObject weapon;
+    public GameObject weaponContainer;
     public float weaponYAxis = -3.0f;   // Height at which weapon spawns - should be at same height as birds
 
     // Survivor Variables
@@ -30,7 +31,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         MoveRaft();
-        ThrowSpear();
+
+        if (Input.GetButtonDown("Fire1"))
+            ThrowSpear();
     }
 
     private void FixedUpdate()
@@ -79,10 +82,11 @@ public class PlayerController : MonoBehaviour
 
     private void ThrowSpear()
     {
-        if (Input.GetButtonDown("Fire1"))
+        // Only spawn weapon there is not another instance of it on the screen
+        if (weaponContainer.transform.childCount < 1)
         {
             // Spawn weapon and rotate it towards the clicked position
-            GameObject spawnedWeapon = Instantiate(weapon, transform.position, Quaternion.identity);
+            GameObject spawnedWeapon = Instantiate(weapon, transform.position, Quaternion.identity, weaponContainer.transform);
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3 relativePos = new Vector3(mousePosition.x, 0, mousePosition.z) - spawnedWeapon.transform.position;
             Quaternion rotation = Quaternion.LookRotation(relativePos, new Vector3(0, 1, 0));

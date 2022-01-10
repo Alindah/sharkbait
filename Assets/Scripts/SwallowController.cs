@@ -11,5 +11,6 @@ public class SwallowController : MonoBehaviour
         coconut.transform.parent = null;
         coconut.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         coconut.GetComponent<ShrinkObject>().enabled = true;
+        coconut.GetComponent<DestroyOutOfBounds>().enabled = true;      // This must be reenabled as it will not trigger when bird is destroyed
     }
 }

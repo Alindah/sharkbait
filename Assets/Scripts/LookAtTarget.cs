@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class LookAtTarget : MonoBehaviour
 {
-    public GameObject target;
     public Vector3 orientation;
     public Vector3 correctOrientation;
     private Vector3 targetPosition;
+    private GameObject target;
 
+    private void Start()
+    {
+        // Make target be player if GameObject is a shark
+        if (tag == "Enemy")
+            target = GameObject.FindGameObjectWithTag("Player");
+    }
     void Update()
     {
         targetPosition = target == null ? Camera.main.ScreenToWorldPoint(Input.mousePosition) : target.transform.position;
