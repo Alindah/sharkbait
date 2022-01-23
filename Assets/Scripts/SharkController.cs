@@ -6,7 +6,7 @@ public class SharkController : MonoBehaviour
 {
     public float speed = 1.0f;
     public float yFinalPosition = -0.12f;
-    public float riseSpeed = 0.01f;
+    public float riseSpeed = 1.0f;
     private GameObject target;
 
     // Start is called before the first frame update
@@ -43,7 +43,7 @@ public class SharkController : MonoBehaviour
         }
         else
         {
-            transform.Translate(0, riseSpeed, 0);
+            transform.Translate(0, riseSpeed * Time.deltaTime, 0);
         }
     }
 }

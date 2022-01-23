@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // Raft Variables
+    [Header("RAFT")]
     public float speed = 2.0f;
+    public float xBoulderBoundary = 5.5f;
+    public float zBoulderBoundary = 3.7f;
     public float xBoundary = 7.0f;
     public float zBoundary = 4.7f;
     public float drift = 100.0f;         // Drift from residual velocity 
@@ -13,13 +15,17 @@ public class PlayerController : MonoBehaviour
     private float verticalInput;
     private Rigidbody rb;
 
-    // Weapon Variables
+    [Header("WEAPON")]
     public GameObject weapon;
     public GameObject weaponContainer;
     public float weaponYAxis = -3.0f;   // Height at which weapon spawns - should be at same height as birds
 
-    // Survivor Variables
+    [Header("SURVIVOR")]
     public GameObject survivor;
+
+    [Header("MISC")]
+    public GameController gameController;
+    public GameObject border;
 
     // Start is called before the first frame update
     void Start()
@@ -30,9 +36,15 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // If borders are active, do not allow player to cross boundaries
+        if (border.activeSelf)
+            MoveRaftWithinBorders(xBoulderBoundary, zBoulderBoundary);
+        else
+            MoveRaftOppositeSide(xBoundary, zBoundary);
+
         MoveRaft();
 
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && !gameController.GetPauseStatus())
             ThrowSpear();
     }
 
@@ -42,20 +54,45 @@ public class PlayerController : MonoBehaviour
         rb.AddRelativeForce(new Vector3(horizontalInput, 0, verticalInput) * drift);
     }
 
-    private void MoveRaft()
+    private void OnTriggerEnter(Collider other)
     {
-        // Player will appear on other side of map if they reach the xBoundary in either direction
+        if (other.tag == "Enemy" || other.tag == "Coconut")
+        {
+            gameController.UpdateHealth(-1);
+        }
+    }
+
+    // Do not allow player to cross past indicated boundaries
+    private void MoveRaftWithinBorders(float xBoundary, float zBoundary)
+    {
+        if (transform.position.x > xBoundary)
+            transform.position = new Vector3(xBoundary, transform.position.y, transform.position.z);
+        else if (transform.position.x < -xBoundary)
+            transform.position = new Vector3(-xBoundary, transform.position.y, transform.position.z);
+
+        if (transform.position.z > zBoundary)
+            transform.position = new Vector3(transform.position.x, transform.position.y, zBoundary);
+        else if (transform.position.z < -zBoundary)
+            transform.position = new Vector3(transform.position.x, transform.position.y, -zBoundary);
+    }
+
+    // Player will appear on other side of map if they reach the boundaries in either direction
+    private void MoveRaftOppositeSide(float xBoundary, float zBoundary)
+    {
+        
         if (transform.position.x > xBoundary)
             transform.position = new Vector3(-xBoundary, transform.position.y, transform.position.z);
         else if (transform.position.x < -xBoundary)
             transform.position = new Vector3(xBoundary, transform.position.y, transform.position.z);
 
-        // Player will appear on other side of map if they reach the zBoundary in either direction
         if (transform.position.z > zBoundary)
             transform.position = new Vector3(transform.position.x, transform.position.y, -zBoundary);
         else if (transform.position.z < -zBoundary)
             transform.position = new Vector3(transform.position.x, transform.position.y, zBoundary);
+    }
 
+    private void MoveRaft()
+    {
         // Get player inputs
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");

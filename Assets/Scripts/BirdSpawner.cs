@@ -12,7 +12,6 @@ public class BirdSpawner : MonoBehaviour
     public float delayTime;
     public float spawnIntervalMin;
     public float spawnIntervalMax;
-    public int spawnLimit;
     public float swallowPercentage = 30.0f;
 
     private const string SPAWN_FUNC = "SpawnBird";
