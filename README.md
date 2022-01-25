@@ -1,6 +1,8 @@
 # Sharkbait
 Harper the Castaway is stranded on a raft in shark-infested waters. Can you help him hunt birds and keep the sharks away?
+
 ---
+
 ## Instructions
 Kill birds for food and avoid sharks. Sharks may only be killed by coconuts carried by swallows. Collect pickups to aid you.
 
@@ -19,7 +21,9 @@ Points receive a multiplier bonus as the game progresses.
 ### Pickups
 Heart - Receive 1 life \
 Starfish - Temporarily remove the boulders blocking the borders to allow for a quick getaway!
+
 ---
+
 ## Acknowledgement
 Thank you to the kind souls who provide free assets. Without them, I would be far too lazy to create this game.
 
