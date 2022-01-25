@@ -3,32 +3,17 @@ Harper the Castaway is stranded on a raft in shark-infested waters. Can you help
 
 ---
 
-## Instructions
-Kill birds for food and avoid sharks. Sharks may only be killed by coconuts carried by swallows. Collect pickups to aid you.
-
-### Controls
-Use WASD to move your raft. \
-LEFT-CLICK to fire a spear - only one spear may be fired at a time, so fire sparingly! \
-ESC to pause the game
-
-### Points
-Seagulls - 1 \
-Swallows - 2 \
-Sharks - 15 \
-
-Points receive a multiplier bonus as the game progresses.
-
-### Pickups
-Heart - Receive 1 life \
-Starfish - Temporarily remove the boulders blocking the borders to allow for a quick getaway!
-
----
-
 ## Acknowledgement
 Thank you to the kind souls who provide free assets. Without them, I would be far too lazy to create this game.
 
 ### Audio
-(credit here)
+[Jaws Music](https://freesound.org/people/SpeedY/sounds/3059/) by SpeedY \
+[Splash](https://freesound.org/people/hello_flowers/sounds/32073/) by hello_flowers \
+[Shark Bite](https://freesound.org/people/AndreAngelo/sounds/246184/) by andreangelo \
+[Coconut Bonk](https://freesound.org/people/thecoolcookie17/sounds/573047/) by thecoolcookie17 \
+[Life Pickup Ding](https://freesound.org/people/Mr._Fritz_/sounds/545238/) by Mr.\_Fritz\_ \
+[Starfish Pickup Sparkle](https://freesound.org/people/MATRIXXX_/sounds/462092/) by MATRIXXX_ \
+[Bird Squawk](https://freesound.org/people/JackWilDesign/sounds/607902/) by JackWilDesign
 
 ### Materials
 (credit here)
