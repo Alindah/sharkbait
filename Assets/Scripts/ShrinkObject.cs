@@ -11,6 +11,6 @@ public class ShrinkObject : MonoBehaviour
     {
         // Shrink object until its minimum size
         if (transform.localScale.x > minSize)
-            transform.localScale -= shrinkRate;
+            transform.localScale -= shrinkRate * Time.deltaTime;
     }
 }

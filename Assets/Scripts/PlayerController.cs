@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("MISC")]
     public GameController gameController;
+    public AudioManager audioManager;
     public GameObject border;
 
     // Start is called before the first frame update
@@ -57,9 +58,13 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Enemy" || other.tag == "Coconut")
-        {
             gameController.UpdateHealth(-1);
-        }
+
+        if (other.tag == "Coconut")
+            audioManager.PlaySoundEffect(audioManager.audioBonk);
+
+        if (other.tag == "Enemy")
+            audioManager.PlaySoundEffect(audioManager.audioBite);
     }
 
     // Do not allow player to cross past indicated boundaries

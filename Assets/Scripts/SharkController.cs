@@ -8,11 +8,15 @@ public class SharkController : MonoBehaviour
     public float yFinalPosition = -0.12f;
     public float riseSpeed = 1.0f;
     private GameObject target;
+    private AudioManager audioManager;
+    private const string AUDIO_MANAGER_NAME = "AudioManager";
 
     // Start is called before the first frame update
     void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player");
+        audioManager = GameObject.Find(AUDIO_MANAGER_NAME).GetComponent<AudioManager>();
+        audioManager.PlaySoundEffect(audioManager.audioJaws);
     }
 
     // Update is called once per frame

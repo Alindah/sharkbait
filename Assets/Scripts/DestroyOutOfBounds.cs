@@ -13,4 +13,10 @@ public class DestroyOutOfBounds : MonoBehaviour
         if (Mathf.Abs(transform.position.x) > xBoundary || Mathf.Abs(transform.position.y) > yBoundary || Mathf.Abs(transform.position.z) > zBoundary)
             Destroy(gameObject);
     }
+
+    // This cleans up objects that were not cleaned up on quit
+    private void OnApplicationQuit()
+    {
+        Destroy(gameObject);
+    }
 }
