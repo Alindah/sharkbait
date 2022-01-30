@@ -1,5 +1,6 @@
 # Sharkbait
 Harper the Castaway is stranded on a raft in shark-infested waters. Can you help him hunt birds and fend off sharks?
+[Click here to play!](https://alinda.dev/games/sharkbait/index.html)
 
 ---
 
