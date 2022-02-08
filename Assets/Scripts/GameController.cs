@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,8 +15,11 @@ public class GameController : MonoBehaviour
     public Sprite emptyHeart;
 
     [Header("Panels")]
+    public GameObject startPanel;
     public GameObject pausePanel;
     public GameObject losePanel;
+    public Transform instructionsContainer;
+    public GameObject[] instructionPages;
 
     [Header("Difficulty")]
     public BirdSpawner birdSpawner;
@@ -28,22 +32,31 @@ public class GameController : MonoBehaviour
 
     [Header("Misc")]
     public float wilsonSpawnChance = 5.0f;
-    
+
+    private GameStats gameStats;
     private Image[] lifeImages;
     private int maxHealth;
     private string scoreTextString;
     private bool gameIsPaused = false;
+    private bool gameIsRunning = false;
     private bool wilsonIsActive = false;
     private int level = 1;
+    private float gameOverDelayTime = 0.01f;
+    private const string PAGE_NUMBER_NAME = "PageNumber";
+    private const string PANEL_HEADER_NAME = "Header";
+    private const string PANEL_STATS_NAME = "Stats";
+    private const string PANEL_WILSON = "Wilson";
+    private const string GAME_OVER_FUNC = "GameOverDelay";
 
     void Start()
     {
-        // Reset variables
-        Time.timeScale = 1;
-
+        PauseGame();
+        gameStats = gameObject.GetComponent<GameStats>();
+        instructionPages = new GameObject[instructionsContainer.childCount];
         maxHealth = healthContainer.transform.childCount;
         lifeImages = healthContainer.transform.GetComponentsInChildren<Image>();
         scoreTextString = scoreText.text;
+        GetInstructionPages();
         UpdateUIScore();
         InvokeRepeating("RampUpDifficulty", timeUntilRampUp, timeUntilRampUp);
     }
@@ -86,7 +99,7 @@ public class GameController : MonoBehaviour
         UpdateUIHealth(lifeDifference);
 
         if (lives <= 0)
-            ShowGameOver();
+            StartCoroutine(GAME_OVER_FUNC);
     }
 
     private void UpdateUIScore()
@@ -102,14 +115,67 @@ public class GameController : MonoBehaviour
             lifeImages[lives - 1].sprite = fullHeart;
     }
 
+    public void StartGame()
+    {
+        startPanel.SetActive(false);
+        Time.timeScale = 1;
+        gameIsPaused = false;
+        gameIsRunning = true;
+    }
+
+    private void GetInstructionPages()
+    {
+        for (int i = 0; i < instructionsContainer.childCount; i++)
+        {
+            instructionPages[i] = instructionsContainer.GetChild(i).gameObject;
+            SetInstructionPageNumber(instructionPages[i], i);
+        }
+    }
+
+    public void ShowInstructions()
+    {
+        SwitchPanels(startPanel, instructionPages[0]);
+    }
+
+    public void SwitchPanels(GameObject previousPanel, GameObject nextPanel)
+    {
+        previousPanel.SetActive(false);
+        nextPanel.SetActive(true);
+    }
+
+    private void SetInstructionPageNumber(GameObject instructionPage, int index)
+    {
+        Text pageNumText = instructionPage.transform.Find(PAGE_NUMBER_NAME).gameObject.GetComponent<Text>();
+        string message = pageNumText.text;
+        pageNumText.text = String.Format(message, index + 1, instructionsContainer.childCount);
+    }
+
+    // Need delay because scripts execute in wrong order (even after adjustment in Edit > Project Settings > Script Execution Order)
+    // Without it, stats will not be updated properly before appearing on the screen
+    private IEnumerator GameOverDelay()
+    {
+        // Note: We do not pause the game until after delay because WaitForSeconds() is affected by Time.timeScale
+        gameIsRunning = false;
+        yield return new WaitForSeconds(gameOverDelayTime);
+        ShowGameOver();
+    }
+
     private void ShowGameOver()
     {
-        Text loseScreenText = losePanel.GetComponentInChildren<Text>();
+        Text loseScreenText = losePanel.transform.Find(PANEL_HEADER_NAME).GetComponent<Text>();
+        Text statsText = losePanel.transform.Find(PANEL_STATS_NAME).GetComponent<Text>();
         string loseMessage = loseScreenText.text;
-        
+        string statsMessage = statsText.text;
+
         PauseGame();
         loseScreenText.text = String.Format(loseMessage, score);
+        statsText.text = String.Format(statsMessage,
+            gameStats.seagullsKilled, gameStats.swallowsKilled, gameStats.sharksKilled, gameStats.numOfSelfBonks, gameStats.pickupsCollected);
         losePanel.SetActive(true);
+
+        // Show Wilson icon if he was picked up
+        if (gameStats.wilsonRescued)
+            losePanel.transform.Find(PANEL_WILSON).gameObject.SetActive(true);
     }
 
     private void PauseGame()
@@ -120,7 +186,7 @@ public class GameController : MonoBehaviour
 
     private void TogglePauseMenu()
     {
-        if (losePanel.activeSelf)
+        if (!gameIsRunning)
             return;
 
         pausePanel.SetActive(!pausePanel.activeSelf);
