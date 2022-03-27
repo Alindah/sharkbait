@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PickupController : MonoBehaviour
 {
-    public float pickupDuration = 10.0f;
+    public float pickupDuration = 10.0f;        // If 0, infinite duration until destroyed by something else
     private GameController gameController;
     private AudioManager audioManager;
     private const string PU_LIFE = "PickupLife";
@@ -18,7 +18,8 @@ public class PickupController : MonoBehaviour
         gameController = GameObject.Find(GAME_CONTROLLER_NAME).GetComponent<GameController>();
         audioManager = GameObject.Find(AUDIO_MANAGER_NAME).GetComponent<AudioManager>();
 
-        StartCoroutine("PickupLifespan");
+        if (pickupDuration > 0)
+            StartCoroutine("PickupLifespan");
     }
 
     private void OnTriggerEnter(Collider other)
